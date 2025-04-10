@@ -39,6 +39,23 @@
       --overlay-bg: rgba(0,0,0,0.9);
     }
 
+    /* Variáveis de tema para o estilo roxo (purple) */
+    [data-theme="purple"] {
+      /* O fundo será um gradiente roxo, aplicado diretamente no body via background-image */
+      --bg-container: #4b0082;
+      --text-color: #ffffff;
+      --accordion-bg: #6a0dad;
+      --accordion-hover: #7d00b0;
+      --btn-primary-bg: #8a2be2;
+      --btn-primary-hover: #7b68ee;
+      --btn-secondary-bg: #dc3545;
+      --btn-secondary-hover: #c82333;
+      --zoom-btn-bg: #6a0dad;
+      --zoom-btn-hover: #7d00b0;
+      --popup-bg: #4b0082;
+      --overlay-bg: rgba(0,0,0,0.8);
+    }
+
     /* Estilos base */
     body {
       margin: 0;
@@ -46,6 +63,11 @@
       font-family: Arial, sans-serif;
       background-color: var(--bg-body);
       color: var(--text-color);
+    }
+
+    /* Se o tema for purple, aplica um gradiente de fundo no body */
+    body[data-theme="purple"] {
+      background-image: linear-gradient(45deg, #6a0dad, #8a2be2);
     }
 
     #gallerySection {
@@ -64,6 +86,7 @@
 
     .gallery-container h2 {
       color: var(--text-color);
+      text-align: center;
     }
 
     .back-report-btn {
@@ -270,7 +293,7 @@
 </head>
 <body data-theme="light">
   <!-- Botão de Alternar Tema -->
-  <button id="themeToggleBtn" onclick="toggleTheme()">🌗 Alternar Tema</button>
+  <button id="themeToggleBtn" onclick="toggleTheme()">🌗 Alterar Tema</button>
 
   <!-- Seção da Galeria -->
   <div id="gallerySection">
@@ -279,14 +302,14 @@
       <div class="overlay-content">
         <h3>Bem-vindo à Galeria de Imagens</h3>
         <p>
-          Ao visualizar as imagens, você pode aumentar ou diminuir seu tamanho. Se a imagem ultrapassar a área visível, utilize a rolagem para ver todas as partes (para cima/baixo e para os lados).
+          Ao visualizar as imagens, você pode ampliar ou reduzir o tamanho. Caso a imagem ultrapasse a área visível, utilize a rolagem para ver todas as partes.
         </p>
         <button class="gallery-view-image-btn" onclick="closeGalleryOverlay()">Entrar</button>
       </div>
     </div>
 
     <div class="gallery-container">
-      <h2>📸 Galeria de Imagens</h2>
+      <h2>📸 Galeria de Imagens – Teacher Angel</h2>
       
       <button class="gallery-accordion">🖼️ Imagem 1</button>
       <div class="gallery-panel">
@@ -479,7 +502,14 @@
     function toggleTheme() {
       const body = document.body;
       const currentTheme = body.getAttribute("data-theme");
-      body.setAttribute("data-theme", currentTheme === "light" ? "dark" : "light");
+      // Ciclo: light → dark → purple → light ...
+      if (currentTheme === "light") {
+        body.setAttribute("data-theme", "dark");
+      } else if (currentTheme === "dark") {
+        body.setAttribute("data-theme", "purple");
+      } else {
+        body.setAttribute("data-theme", "light");
+      }
     }
   </script>
 </body>
