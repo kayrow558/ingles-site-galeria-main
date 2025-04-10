@@ -39,20 +39,20 @@
       --overlay-bg: rgba(0,0,0,0.9);
     }
 
-    /* Variáveis de tema para o estilo roxo (purple) */
+    /* Variáveis de tema para o estilo roxo (purple) – aparência suave */
     [data-theme="purple"] {
-      /* O fundo será um gradiente roxo, aplicado diretamente no body via background-image */
-      --bg-container: #4b0082;
-      --text-color: #ffffff;
-      --accordion-bg: #6a0dad;
-      --accordion-hover: #7d00b0;
-      --btn-primary-bg: #8a2be2;
-      --btn-primary-hover: #7b68ee;
+      --bg-body: #f3e5f5;          /* Fundo roxo suave */
+      --bg-container: #ffffff;       /* Container com fundo branco */
+      --text-color: #4a148c;         /* Texto em roxo escuro */
+      --accordion-bg: #ce93d8;
+      --accordion-hover: #ba68c8;
+      --btn-primary-bg: #ab47bc;
+      --btn-primary-hover: #9c27b0;
       --btn-secondary-bg: #dc3545;
       --btn-secondary-hover: #c82333;
-      --zoom-btn-bg: #6a0dad;
-      --zoom-btn-hover: #7d00b0;
-      --popup-bg: #4b0082;
+      --zoom-btn-bg: #ce93d8;
+      --zoom-btn-hover: #ba68c8;
+      --popup-bg: #ffffff;
       --overlay-bg: rgba(0,0,0,0.8);
     }
 
@@ -64,10 +64,9 @@
       background-color: var(--bg-body);
       color: var(--text-color);
     }
-
-    /* Se o tema for purple, aplica um gradiente de fundo no body */
+    /* Se o tema for purple, aplica um gradiente suave no fundo do body */
     body[data-theme="purple"] {
-      background-image: linear-gradient(45deg, #6a0dad, #8a2be2);
+      background-image: linear-gradient(45deg, #f3e5f5, #e1bee7);
     }
 
     #gallerySection {
@@ -87,6 +86,7 @@
     .gallery-container h2 {
       color: var(--text-color);
       text-align: center;
+      margin-bottom: 20px;
     }
 
     .back-report-btn {
@@ -271,29 +271,28 @@
       background-color: #e0a800;
     }
 
-    /* Botão de Alternar Tema */
-    #themeToggleBtn {
+    /* Seletor de tema (mantém a interface dos botões como testada) */
+    #themeSelect {
       position: fixed;
       top: 15px;
       right: 15px;
       z-index: 30;
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
+      padding: 8px;
       font-size: 14px;
-    }
-
-    #themeToggleBtn:hover {
-      background-color: #5a6268;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      color: #333;
     }
   </style>
 </head>
 <body data-theme="light">
-  <!-- Botão de Alternar Tema -->
-  <button id="themeToggleBtn" onclick="toggleTheme()">🌗 Alterar Tema</button>
+  <!-- Seletor de Tema -->
+  <select id="themeSelect" onchange="setTheme(this.value)">
+    <option value="light">Tema Claro</option>
+    <option value="dark">Tema Escuro</option>
+    <option value="purple">Tema Roxo</option>
+  </select>
 
   <!-- Seção da Galeria -->
   <div id="gallerySection">
@@ -309,7 +308,7 @@
     </div>
 
     <div class="gallery-container">
-      <h2>📸 Galeria de Imagens – Teacher Angel</h2>
+      <h2>📸 Galeria de Imagens – <em>Angel english teacher</em></h2>
       
       <button class="gallery-accordion">🖼️ Imagem 1</button>
       <div class="gallery-panel">
@@ -438,7 +437,7 @@
       <div class="gallery-popup-content">
         <span class="gallery-close" onclick="closeGalleryPopup()">&times;</span>
         <p>
-          Use os botões abaixo para aumentar ou diminuir a imagem. Se a imagem ultrapassar os limites da janela, utilize a rolagem para visualizar outras partes.
+          Use os botões abaixo para ampliar ou reduzir a imagem. Se a imagem ultrapassar os limites da janela, utilize a rolagem para visualizar outras partes.
         </p>
         <div class="gallery-image-container">
           <img id="galleryPopupImg" src="" alt="Imagem">
@@ -456,7 +455,7 @@
 
   <script>
     let zoomFactor = 1;
-
+    
     function showGalleryPopup(imageSrc) {
       zoomFactor = 1;
       const img = document.getElementById("galleryPopupImg");
@@ -468,11 +467,11 @@
       downloadBtn.setAttribute("download", imageSrc);
       updateZoomText();
     }
-
+    
     function closeGalleryPopup() {
       document.getElementById("galleryPopup").style.display = "none";
     }
-
+    
     function zoomGalleryImage(factor) {
       let newZoom = zoomFactor * factor;
       if (newZoom >= 0.2 && newZoom <= 5) {
@@ -481,15 +480,15 @@
         updateZoomText();
       }
     }
-
+    
     function updateZoomText() {
       document.getElementById("zoomLevel").innerText = "Zoom: " + zoomFactor.toFixed(1) + "x";
     }
-
+    
     function closeGalleryOverlay() {
       document.getElementById("galleryWelcomeOverlay").style.display = "none";
     }
-
+    
     var galleryAccordions = document.getElementsByClassName("gallery-accordion");
     for (var i = 0; i < galleryAccordions.length; i++) {
       galleryAccordions[i].addEventListener("click", function() {
@@ -498,18 +497,9 @@
         panel.style.display = (panel.style.display === "block") ? "none" : "block";
       });
     }
-
-    function toggleTheme() {
-      const body = document.body;
-      const currentTheme = body.getAttribute("data-theme");
-      // Ciclo: light → dark → purple → light ...
-      if (currentTheme === "light") {
-        body.setAttribute("data-theme", "dark");
-      } else if (currentTheme === "dark") {
-        body.setAttribute("data-theme", "purple");
-      } else {
-        body.setAttribute("data-theme", "light");
-      }
+    
+    function setTheme(theme) {
+      document.body.setAttribute("data-theme", theme);
     }
   </script>
 </body>
